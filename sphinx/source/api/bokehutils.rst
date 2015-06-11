@@ -9,7 +9,7 @@ Submodules
    bokehutils.axes
    bokehutils.core
    bokehutils.geom
-   bokehutils.plot
+   bokehutils.mgeom
    bokehutils.publish
 
 Module contents

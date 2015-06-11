@@ -3,9 +3,9 @@
 import unittest
 from . import data, source, fig
 from nose.tools import raises
-from bokehutils.core import inspect_args, inspect_y_args, inspect_fig_arg
+from bokehutils.core import InspectArgs, inspect_fig_arg
 
-@inspect_args
+@InspectArgs()
 def func(fig, x, y, df=None, source=None,
         glyph='circle', **kwargs):
     d = {'fig': fig, 'x': x, 'y': y, 'df': df,
@@ -13,9 +13,13 @@ def func(fig, x, y, df=None, source=None,
     d.update(kwargs)
     return d
 
-@inspect_y_args
-def func_m(fig, x, y, df=None, source=None, **kwargs):
-    return y
+@InspectArgs(allow_y_list=True)
+def func_m(fig, x, y, df=None, source=None,
+        glyph='circle', **kwargs):
+    d = {'fig': fig, 'x': x, 'y': y, 'df': df,
+        'source': source, 'glyph': glyph}
+    d.update(kwargs)
+    return d
 
 @inspect_fig_arg
 def func_f(fig, **kwargs):
@@ -113,12 +117,12 @@ class TestInspectYArgs(unittest.TestCase):
         func_m(self._fig, "x", ["1", 2], self._data)
 
     def test_str(self):
-        y = func_m(self._fig, "x", "3", self._data)
-        self.assertListEqual(y, ["3"])
+        d = func_m(self._fig, "x", ["y"], self._data)
+        self.assertListEqual(d["y"], ["y"])
 
     def test_list(self):
-        y = func_m(self._fig, "x", ["foo", "bar"], self._data)
-        self.assertListEqual(y, ["foo", "bar"])
+        d = func_m(self._fig, "x", ["y", "z"], self._data)
+        self.assertListEqual(sorted(d["y"]), ["y", "z"])
 
 class TestInspectFigArgs(unittest.TestCase):
     def setUp(self):

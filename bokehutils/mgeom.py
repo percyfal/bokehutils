@@ -1,20 +1,27 @@
 # Copyright (C) 2015 by Per Unneberg
+"""NOTE: the functions in this module allow for plotting of multiple
+columns of a data frame. If ggplot conventions are to be followed, the
+data frame should first be stacked. I keep these here for now as I'm
+uncertain what is the best way forward.
+
+"""
 import pandas.core.common as com
 from bokehutils.core import InspectArgs
+from bokehutils.geom import points, dotplot
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-@InspectArgs()
-def points(fig, x, y,
+@InspectArgs(allow_y_list=True)
+def mpoints(fig, x, y,
            df=None, source=None, glyph='circle', **kwargs):
-    """points: add points to a figure
+    """points: add points from multiple columns to a figure
 
     Args:
       fig (:py:class:`~bokeh.plotting.Plot`): bokeh Plot object
       x (str): string for x component
-      y (str): string for y component
+      y (str, list): string or list of strings for y component
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
       source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
       glyph (str): glyph character to use
@@ -27,45 +34,21 @@ def points(fig, x, y,
 
           import pandas as pd
           from bokeh.plotting import figure, show, hplot
-          from bokehutils.geom import points
+          from bokehutils.mgeom import mpoints
 
-          df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
+          df = pd.DataFrame([[1,2,3], [2,5,2], [3,9,6]], columns=["x", "y", "z"])
 
           f = figure(title="Points", width=400, height=400)
-          points(f, "x", "y", df)
-          points(f, "x", "x", df, color="red")
+          mpoints(f, "x", ["y", "z"], df)
           show(f)
     
-      .. bokeh-plot::
-          :source-position: above
-
-          import pandas as pd
-          from bokeh.plotting import figure, show, hplot
-          from bokehutils.geom import points
-
-          df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
-
-          f1 = figure(title="Large plot, small points", width=400, height=400)
-          points(f1, "x", "y", df)
-
-          f2 = figure(title="Small plot, large points",
-                      title_text_font_size="8pt",
-                      plot_width=200, plot_height=200)
-          points(f2, "x", "y", df, line_color="black", color="red", size=20,
-                 glyph="asterisk")
-          # Link the x ranges
-          f2.x_range = f1.x_range
-          show(hplot(f1, f2))
-
     """
-    logger.debug("Adding points to figure {}".format(fig))
-    try:
-        getattr(fig, glyph)(x=x, y=y, source=source, **kwargs)
-    except AttributeError:
-        logger.error("no such glyph function {} for {}".format(glyph, fig))
-        raise
+    logger.debug("Adding mpoints to figure {}".format(fig))
+    for yy in y:
+        points(fig=fig, x=x, y=yy, df=df, source=source, glyph=glyph, **kwargs)
 
-@InspectArgs()
+
+@InspectArgs
 def abline(fig, x, y, df=None, source=None, slope=0, intercept=0, **kwargs):
     """abline - add an abline to current plot
 
@@ -106,7 +89,7 @@ def abline(fig, x, y, df=None, source=None, slope=0, intercept=0, **kwargs):
     kwargs['color'] = kwargs.get('color', 'red')
     fig.line(x=[x0, x1], y=[y0, y1], **kwargs)
 
-@InspectArgs()
+@InspectArgs
 def dotplot(fig, x, y, df=None, source=None,
             binaxis="x", **kwargs):
     """dotplot: make a dotplot.
@@ -146,13 +129,11 @@ def dotplot(fig, x, y, df=None, source=None,
 
     """
     logger.debug("Adding dotplot to figure {}".format(fig))
-    # FIXME: once axes can be modified, one could also transform
-    # numerical ranges into factors on the fly
     if com.is_numeric_dtype(source.to_df()[x]) == True:
         raise TypeError("{}: dependant variable must not be numerical type".format(__name__))
     fig.circle(x=x, y=y, source=source, **kwargs)
 
-@InspectArgs()
+@InspectArgs
 def lines(fig, x, y, df=None, source=None, **kwargs):
     """lines: add lines to a figure
 
