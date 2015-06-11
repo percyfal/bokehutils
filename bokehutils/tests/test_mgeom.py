@@ -4,7 +4,7 @@ import unittest
 from . import data, fig, source
 from nose.tools import raises
 from bokeh.plotting import show, output_file, figure
-from bokehutils.mgeom import mpoints
+from bokehutils.mgeom import mpoints, mlines
 
 
 class TestMPoints(unittest.TestCase):
@@ -27,6 +27,29 @@ class TestMPoints(unittest.TestCase):
     def test_init(self):
         print ("Testing init")
         mpoints(self._fig, "x", ["y", "z"], self._data)
+        output_file("tabort.html")
+        show(self._fig)
+
+
+class TestMLines(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    @classmethod
+    def setUpClass(cls):
+        cls._data = data
+        cls._source = source
+        cls._fig = fig
+
+
+    @classmethod
+    def tearDownClass(cls):
+        del cls._data
+        del cls._source
+        del cls._fig
+
+    def test_init(self):
+        mlines(self._fig, "x", ["y", "z"], self._data, color=["red", "blue"], legend=["y", "z"])
         output_file("tabort.html")
         show(self._fig)
 

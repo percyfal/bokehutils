@@ -7,7 +7,8 @@ uncertain what is the best way forward.
 """
 import pandas.core.common as com
 from bokehutils.core import InspectArgs
-from bokehutils.geom import points, dotplot
+from bokehutils.geom import points, dotplot, lines
+from bokeh.palettes import brewer
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 @InspectArgs(allow_y_list=True)
 def mpoints(fig, x, y,
-           df=None, source=None, glyph='circle', **kwargs):
+           df=None, source=None, glyph='circle', color=False,
+           legend=False, **kwargs):
     """points: add points from multiple columns to a figure
 
     Args:
@@ -25,6 +27,8 @@ def mpoints(fig, x, y,
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
       source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
       glyph (str): glyph character to use
+      color (bool): set color
+      legend (bool): set legend
       kwargs: keyword arguments to pass to glyph drawing function
 
     Examples:
@@ -39,60 +43,26 @@ def mpoints(fig, x, y,
           df = pd.DataFrame([[1,2,3], [2,5,2], [3,9,6]], columns=["x", "y", "z"])
 
           f = figure(title="Points", width=400, height=400)
-          mpoints(f, "x", ["y", "z"], df)
+          mpoints(f, "x", ["y", "z"], df, size=10, line_color="black")
           show(f)
     
     """
     logger.debug("Adding mpoints to figure {}".format(fig))
-    for yy in y:
-        points(fig=fig, x=x, y=yy, df=df, source=source, glyph=glyph, **kwargs)
+    for i in range(len(y)):
+        points(fig=fig, x=x, y=y[i], df=df, source=source,
+               glyph=glyph, **kwargs)
+        if color:
+            # Add color here
+            # color = brewer["PiYG"][min(max(3, len(y)), 10)]
+            pass
+        if legend:
+            # Add legend here via legend function
+            pass
 
-
-@InspectArgs
-def abline(fig, x, y, df=None, source=None, slope=0, intercept=0, **kwargs):
-    """abline - add an abline to current plot
-
-    Args:
-      fig (:py:class:`~bokeh.plotting.Plot`): bokeh Plot object
-      x (str): string for x component
-      y (str): string for y component
-      df (:py:class:`~pandas.DataFrame`): pandas DataFram
-      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
-      slope (int): slope of line
-      intercept (int): intercept
-      kwargs: keyword arguments to pass to line drawing function
-
-
-    Example:
-
-      .. bokeh-plot::
-          :source-position: above
-
-          import pandas as pd
-          from bokeh.plotting import figure, show, hplot
-          from bokehutils.geom import abline
-
-          df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
-
-          f = figure(title="abline", height=300, width=300)
-          abline(f, "x", "y", df=df, slope=1)
-          abline(f, "x", "y", df=df, slope=2)
-          abline(f, "x", "y", df=df, intercept=3, color="blue", line_width=5)
-          show(f)
-
-    """
-    logger.debug("Adding abline to figure {}".format(fig))
-    x0 = 0
-    y0 = intercept
-    x1 = max(df[x])
-    y1 = (x1-x0) * slope + y0
-    kwargs['color'] = kwargs.get('color', 'red')
-    fig.line(x=[x0, x1], y=[y0, y1], **kwargs)
-
-@InspectArgs
-def dotplot(fig, x, y, df=None, source=None,
-            binaxis="x", **kwargs):
-    """dotplot: make a dotplot.
+@InspectArgs(allow_y_list=True)
+def mdotplot(fig, x, y, df=None, source=None,
+             color=False, legend=False, binaxis="x", **kwargs):
+    """mdotplot: make a mdotplot.
 
     In this implementation, the explanatory variable is treated as a
     factor.
@@ -103,6 +73,8 @@ def dotplot(fig, x, y, df=None, source=None,
       y (str): string for y component
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
       source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      color (bool): set color
+      legend (bool): set legend
       binaxis (str): axis to bin dots on
       kwargs: keyword arguments to pass to glyph drawing function
 
@@ -113,8 +85,7 @@ def dotplot(fig, x, y, df=None, source=None,
 
           import pandas as pd
           from bokeh.plotting import figure, show
-          from bokehutils.geom import dotplot
-          from bokehutils.axes import grid
+          from bokehutils.mgeom import mdotplot
 
           df = pd.DataFrame([[1,2,"A"], [2,5,"B"], [3,9,"A"]], columns=["x", "y", "foo"])
 
@@ -122,8 +93,7 @@ def dotplot(fig, x, y, df=None, source=None,
           # will use linear axis by default. It is currently cumbersome
           # to change axes types in an existing figure.
           f = figure(title="Dotplot", width=400, height=400, x_range=list(df["foo"]))
-          dotplot(f, "foo", "y", df)
-          grid(f, grid_line_color=None)
+          mdotplot(f, "foo", ["y", "x"], df)
 
           show(f)
 
@@ -131,10 +101,20 @@ def dotplot(fig, x, y, df=None, source=None,
     logger.debug("Adding dotplot to figure {}".format(fig))
     if com.is_numeric_dtype(source.to_df()[x]) == True:
         raise TypeError("{}: dependant variable must not be numerical type".format(__name__))
-    fig.circle(x=x, y=y, source=source, **kwargs)
+    for i in range(len(y)):
+        dotplot(fig=fig, x=x, y=y[i], source=source, **kwargs)
+        if color:
+            # Add color here
+            # color = brewer["PiYG"][min(max(3, len(y)), 10)]
+            pass
+        if legend:
+            # Add legend here via legend function
+            pass
+    
 
-@InspectArgs
-def lines(fig, x, y, df=None, source=None, **kwargs):
+
+@InspectArgs(allow_y_list=True)
+def mlines(fig, x, y, df=None, source=None, **kwargs):
     """lines: add lines to a figure
 
     Args:
@@ -143,6 +123,8 @@ def lines(fig, x, y, df=None, source=None, **kwargs):
       y (str): string for y component
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
       source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      color (bool): set color
+      legend (bool): set legend
       kwargs: keyword arguments to pass to fig.line
 
     Example:
@@ -152,16 +134,21 @@ def lines(fig, x, y, df=None, source=None, **kwargs):
 
           import pandas as pd
           from bokeh.plotting import figure, show, hplot
-          from bokehutils.geom import lines
+          from bokehutils.mgeom import mlines
 
-          df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
+          df = pd.DataFrame([[1,2,4], [2,5,2], [3,9,12]], columns=["x", "y", "foo"])
 
           f = figure(title="Line plot", width=400, height=400)
-          lines(f, "x", "y", df, legend="y")
-          lines(f, "x", "x", df, legend="x", color="red")
+          mlines(f, "x", ["y", "foo"], df, color=["red", "blue"], legend=["y", "foo"])
 
           show(f)
 
     """
     logger.debug("Adding points to figure {}".format(fig))
-    fig.line(x=x, y=y, source=source, **kwargs)
+    color = kwargs.pop('color') if 'color' in kwargs else [None] * len(y)
+    legend = kwargs.pop('legend') if 'legend' in kwargs else [None] * len(y)
+    for yy, c, l in zip(y, color, legend):
+        kw = kwargs
+        kw['color'] = c
+        kw['legend'] = l
+        lines(fig=fig, x=x, y=yy, source=source, **kwargs)

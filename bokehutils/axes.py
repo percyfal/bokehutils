@@ -1,5 +1,5 @@
 # Copyright (C) 2015 by Per Unneberg
-from bokehutils.core import inspect_args, inspect_fig_arg
+from bokehutils.core import inspect_fig_arg
 import logging
 
 logger = logging.getLogger(__name__)
