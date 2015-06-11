@@ -1,4 +1,5 @@
 # Copyright (C) 2015 by Per Unneberg
+import pandas.core.common as com
 from bokehutils.core import inspect_args
 import logging
 
@@ -19,9 +20,10 @@ def points(fig, x, y,
       glyph (str): glyph character to use
       kwargs: keyword arguments to pass to glyph drawing function
 
-    Example:
+    Examples:
 
       .. bokeh-plot::
+          :source-position: above
 
           import pandas as pd
           from bokeh.plotting import figure, show, hplot
@@ -29,7 +31,21 @@ def points(fig, x, y,
 
           df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
 
-          f1 = figure(title="Large plot, small points")
+          f = figure(title="Points", width=400, height=400)
+          points(f, "x", "y", df)
+          points(f, "x", "x", df, color="red")
+          show(f)
+    
+      .. bokeh-plot::
+          :source-position: above
+
+          import pandas as pd
+          from bokeh.plotting import figure, show, hplot
+          from bokehutils.geom import points
+
+          df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
+
+          f1 = figure(title="Large plot, small points", width=400, height=400)
           points(f1, "x", "y", df)
 
           f2 = figure(title="Small plot, large points",
@@ -48,3 +64,121 @@ def points(fig, x, y,
     except AttributeError:
         logger.error("no such glyph function {} for {}".format(glyph, fig))
         raise
+
+@inspect_args
+def abline(fig, x, y, df=None, source=None, slope=0, intercept=0, **kwargs):
+    """abline - add an abline to current plot
+
+    Args:
+      fig (:py:class:`~bokeh.plotting.Plot`): bokeh Plot object
+      x (str): string for x component
+      y (str): string for y component
+      df (:py:class:`~pandas.DataFrame`): pandas DataFram
+      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      slope (int): slope of line
+      intercept (int): intercept
+      kwargs: keyword arguments to pass to line drawing function
+
+
+    Example:
+
+      .. bokeh-plot::
+          :source-position: above
+
+          import pandas as pd
+          from bokeh.plotting import figure, show, hplot
+          from bokehutils.geom import abline
+
+          df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
+
+          f = figure(title="abline", height=300, width=300)
+          abline(f, "x", "y", df=df, slope=1)
+          abline(f, "x", "y", df=df, slope=2)
+          abline(f, "x", "y", df=df, intercept=3, color="blue", line_width=5)
+          show(f)
+
+    """
+    logger.debug("Adding abline to figure {}".format(fig))
+    x0 = 0
+    y0 = intercept
+    x1 = max(df[x])
+    y1 = (x1-x0) * slope + y0
+    kwargs['color'] = kwargs.get('color', 'red')
+    fig.line(x=[x0, x1], y=[y0, y1], **kwargs)
+
+@inspect_args
+def dotplot(fig, x, y, df=None, source=None,
+            binaxis="x", **kwargs):
+    """dotplot: make a dotplot.
+
+    In this implementation, the explanatory variable is treated as a
+    factor.
+
+    Args:
+      fig (:py:class:`~bokeh.plotting.Plot`): bokeh Plot object
+      x (str): string for x component
+      y (str): string for y component
+      df (:py:class:`~pandas.DataFrame`): pandas DataFram
+      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      binaxis (str): axis to bin dots on
+      kwargs: keyword arguments to pass to glyph drawing function
+
+    Example:
+
+      .. bokeh-plot::
+          :source-position: above
+
+          import pandas as pd
+          from bokeh.plotting import figure, show
+          from bokehutils.geom import dotplot
+          from bokehutils.axes import grid
+
+          df = pd.DataFrame([[1,2,"A"], [2,5,"B"], [3,9,"A"]], columns=["x", "y", "foo"])
+
+          # NB: currently *must* set the range here, otherwise figure
+          # will use linear axis by default. It is currently cumbersome
+          # to change axes types in an existing figure.
+          f = figure(title="Dotplot", width=400, height=400, x_range=list(df["foo"]))
+          dotplot(f, "foo", "y", df)
+          grid(f, grid_line_color=None)
+
+          show(f)
+
+    """
+    logger.debug("Adding dotplot to figure {}".format(fig))
+    if com.is_numeric_dtype(source.to_df()[x]) == True:
+        raise TypeError("{}: dependant variable must not be numerical type".format(__name__))
+    fig.circle(x=x, y=y, source=source, **kwargs)
+
+@inspect_args
+def lines(fig, x, y, df=None, source=None, **kwargs):
+    """lines: add lines to a figure
+
+    Args:
+      fig (:py:class:`~bokeh.plotting.Plot`): bokeh Plot object
+      x (str): string for x component
+      y (str): string for y component
+      df (:py:class:`~pandas.DataFrame`): pandas DataFram
+      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      kwargs: keyword arguments to pass to fig.line
+
+    Example:
+
+      .. bokeh-plot::
+          :source-position: above
+
+          import pandas as pd
+          from bokeh.plotting import figure, show, hplot
+          from bokehutils.geom import lines
+
+          df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
+
+          f = figure(title="Line plot", width=400, height=400)
+          lines(f, "x", "y", df, legend="y")
+          lines(f, "x", "x", df, legend="x", color="red")
+
+          show(f)
+
+    """
+    logger.debug("Adding points to figure {}".format(fig))
+    fig.line(x=x, y=y, source=source, **kwargs)
