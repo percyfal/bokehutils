@@ -9,6 +9,12 @@ versioneer.versionfile_build = 'gaqtk/gaqtk/_version.py'
 versioneer.tag_prefix = ''  # tags are like 1.2.0
 versioneer.parentdir_prefix = 'gaqtk-'  # dirname like 'myproject-1.2.0'
 
+try:
+    with open("requirements.txt", "r") as fh:
+        install_requires = [x.strip() for x in fh.readlines()]
+except IOError:
+    install_requires = []
+
 setup(name="bokehutils",
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
@@ -17,11 +23,7 @@ setup(name="bokehutils",
       description="Utility functions for working with bokeh plots",
       license="MIT",
       scripts=glob.glob('scripts/*.py'),
-      install_requires=[
-          "bokeh",
-          "sphinx",
-          "nose",
-      ],
+      install_requires=install_requires,
       test_suite='nose.collector',
       packages=find_packages(exclude=['ez_setup', 'test*']),
       namespace_packages=[
