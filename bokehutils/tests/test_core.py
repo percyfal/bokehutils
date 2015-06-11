@@ -54,6 +54,9 @@ class TestCore(unittest.TestCase):
     def test_fig_w(self):
         func(fig="fig", x="x", y="y")
 
+    @raises(TypeError)
+    def test_wrong_col(self):
+        func(fig=self._fig, x="x", y="foo", df=self._data)
 
     def test_args_ok(self):
         d = func(self._fig, "x", "y", self._data)

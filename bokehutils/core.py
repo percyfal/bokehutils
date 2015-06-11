@@ -41,6 +41,12 @@ def inspect_args(func):
             source = ColumnDataSource(df)
         else:
             raise
+
+        if x not in source.column_names:
+            raise TypeError("x: '{}' not in {}".format(x, source.column_names))
+        if y not in source.column_names:
+            raise TypeError("y: '{}' not in {}".format(y, source.column_names))
+
         return func(fig=fig, x=x, y=y, df=df, source=source, *arglist, **kw)
 
     return check
