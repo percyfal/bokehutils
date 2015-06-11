@@ -1,0 +1,2 @@
+include versioneer.py
+include bokehutils/_version.py

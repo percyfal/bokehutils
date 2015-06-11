@@ -19,7 +19,7 @@ setup(name="bokehutils",
       scripts=glob.glob('scripts/*.py'),
       install_requires=[
           "bokeh",
-          "jinja2",
+          "sphinx",
           "nose",
       ],
       test_suite='nose.collector',
