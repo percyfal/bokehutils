@@ -1,10 +1,11 @@
 # Copyright (C) 2015 by Per Unneberg
-from bokehutils.core import inspect_args
+from bokehutils.core import inspect_args, inspect_fig_arg
 import logging
 
 logger = logging.getLogger(__name__)
 
 
+@inspect_fig_arg
 def xaxis(fig, i=0, **kwargs):
     """xaxis - modify the xaxis
 
@@ -40,6 +41,7 @@ def xaxis(fig, i=0, **kwargs):
     for k, v in kwargs.items():
         setattr(fig.xaxis, k, v)
 
+@inspect_fig_arg
 def yaxis(fig, i=0, **kwargs):
     """yaxis - modify the yaxis
     
@@ -56,6 +58,8 @@ def yaxis(fig, i=0, **kwargs):
     for k, v in kwargs.items():
         setattr(fig.yaxis, k, v)
 
+
+@inspect_fig_arg
 def grid(fig, **kwargs):
     """grid - modify the grid
     

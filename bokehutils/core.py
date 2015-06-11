@@ -6,8 +6,40 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def inspect_y_args(func):
+    """Decorator to inspect y arguments to a function.
+
+    Will check for existence of y and convert it into a list to apply
+    for all y.
+
+    """
+    @wraps(func)
+    def check(*args, **kw):
+        arglist = list(args)
+        try:
+            fig = kw.pop('fig') if 'fig' in kw else arglist.pop(0)
+            x = kw.pop('x') if 'x' in kw else arglist.pop(0)
+            y = kw.pop('y') if 'y' in kw else arglist.pop(0)
+        except IndexError:
+            logger.error("missing arguments to {}".format(func))
+            raise
+        if isinstance(y, list):
+            assert (all([isinstance(yy, str) for yy in y])), \
+                "argument %r does not match list(%s)" % (y, str)
+        else:
+            assert (isinstance(y, str)), \
+                "argument %r does not match %s" % (y, str)
+            y = [y]
+        return y
+    return check
 
 def inspect_args(func):
+    """Decorator to inspect arguments to a function.
+
+    Will check for existence of fig, x, y, and make sure that note df
+    and source are None simultaneously.
+
+    """
     @wraps(func)
     def check(*args, **kw):
         arglist = list(args)
@@ -51,3 +83,22 @@ def inspect_args(func):
 
     return check
 
+
+def inspect_fig_arg(func):
+    """Decorator to inspect fig argument to a function.
+
+    Will check for existence of fig.
+
+    """
+    @wraps(func)
+    def check(*args, **kw):
+        arglist = list(args)
+        try:
+            fig = kw.pop('fig') if 'fig' in kw else arglist.pop(0)
+        except IndexError:
+            logger.error("missing arguments to {}".format(func))
+            raise
+        assert isinstance(fig, Plot), \
+            "argument %r does not match %s" % (fig, Plot)
+        return fig
+    return check

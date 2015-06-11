@@ -3,8 +3,7 @@
 import unittest
 from . import data, source, fig
 from nose.tools import raises
-from bokehutils.core import inspect_args
-
+from bokehutils.core import inspect_args, inspect_y_args, inspect_fig_arg
 
 @inspect_args
 def func(fig, x, y, df=None, source=None,
@@ -14,8 +13,16 @@ def func(fig, x, y, df=None, source=None,
     d.update(kwargs)
     return d
 
+@inspect_y_args
+def func_m(fig, x, y, df=None, source=None, **kwargs):
+    return y
 
-class TestCore(unittest.TestCase):
+@inspect_fig_arg
+def func_f(fig, **kwargs):
+    return fig
+
+    
+class TestInspectArgs(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -80,3 +87,58 @@ class TestCore(unittest.TestCase):
         self.assertListEqual(sorted(list(d['df'].columns)),
                                 sorted(self._source.column_names))
 
+
+class TestInspectYArgs(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    @classmethod
+    def setUpClass(cls):
+        cls._data = data
+        cls._source = source
+        cls._fig = fig
+
+    @classmethod
+    def tearDownClass(cls):
+        del cls._data
+        del cls._source
+        del cls._fig
+
+    @raises(AssertionError)
+    def test_wrong_args(self):
+        func_m(self._fig, "x", 3, self._data)
+
+    @raises(AssertionError)
+    def test_wrong_arglist(self):
+        func_m(self._fig, "x", ["1", 2], self._data)
+
+    def test_str(self):
+        y = func_m(self._fig, "x", "3", self._data)
+        self.assertListEqual(y, ["3"])
+
+    def test_list(self):
+        y = func_m(self._fig, "x", ["foo", "bar"], self._data)
+        self.assertListEqual(y, ["foo", "bar"])
+
+class TestInspectFigArgs(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    @classmethod
+    def setUpClass(cls):
+        cls._data = data
+        cls._source = source
+        cls._fig = fig
+
+    @classmethod
+    def tearDownClass(cls):
+        del cls._data
+        del cls._source
+        del cls._fig
+
+    def test(self):
+        func_f(self._fig)
+
+    @raises(AssertionError)
+    def test_error(self):
+        func_f(fig="foo")

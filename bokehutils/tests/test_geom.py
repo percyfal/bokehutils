@@ -10,7 +10,7 @@ from bokehutils.geom import points, dotplot
 class TestPoints(unittest.TestCase):
     def setUp(self):
         pass
-    
+
     @classmethod
     def setUpClass(cls):
         cls._data = data
@@ -59,11 +59,11 @@ class TestDotplot(unittest.TestCase):
         # dotplot function
         f = figure(x_range=list(self._data["treatment"]), height=200, width=200)
         dotplot(f, "treatment", "y", self._data, line_color='gray', size=20, color="red", legend="y")
-        output_file("tabort.html")
-        show(f)
+        # output_file("tabort.html")
+        # show(f)
 
     # How to update axes when range not set?!?
     def test_dotplot_fig(self):
         dotplot(self._fig, "treatment", "y", self._data, line_color='gray', size=20, color="red")
-        output_file("tabort.html")
-        show(self._fig)
+        # output_file("tabort.html")
+        # show(self._fig)
