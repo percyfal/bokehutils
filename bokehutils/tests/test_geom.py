@@ -25,6 +25,7 @@ class TestPoints(unittest.TestCase):
 
     def test_init(self):
         points(self.f, "x", "y", self._data)
-        output_file("tabort.html")
-        show(self.f)
+
+    def test_style(self):
+        points(self.f, "x", "y", self._data, line_color='gray', size=20, color="red", width=200, height=200)
 
