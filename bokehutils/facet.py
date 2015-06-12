@@ -42,12 +42,13 @@ def facet_grid(fig, x, y, df=None, source=None, groups=None, ncol=3,
             kw.pop('y')
             source = ColumnDataSource(group)
             kw['legend'] = yy if len(lgd) > 0 else None
-            if j > 0:
-                if share_x_range:
-                    kw['x_range'] = flist[0].x_range
-                if share_y_range:
-                    kw['y_range'] = flist[0].y_range
             getattr(subfig, plotfn)(x=x, y=yy, source=source, **kw)
+        if j > 0:
+            if share_x_range:
+                subfig.x_range = flist[0].x_range
+            if share_y_range:
+                subfig.y_range = flist[0].y_range
+        j = j + 1
         flist.append(subfig)
     # Could possibly use curdoc()._current_plot = gridplot()
     return gridplot([flist[i:i+ncol] for i in range(0, len(flist), ncol)])
