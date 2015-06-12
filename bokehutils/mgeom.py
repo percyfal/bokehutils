@@ -87,16 +87,21 @@ def mdotplot(fig, x, y, df=None, source=None,
           from bokeh.plotting import figure, show
           from bokehutils.mgeom import mdotplot
 
-          df = pd.DataFrame([[1,2,"A"], [2,5,"B"], [3,9,"A"]], columns=["x", "y", "foo"])
-
-          # NB: currently *must* set the range here, otherwise figure
-          # will use linear axis by default. It is currently cumbersome
-          # to change axes types in an existing figure.
-          f = figure(title="Dotplot", width=400, height=400, x_range=list(df["foo"]))
+          df = pd.DataFrame([[1,2,"A"], [2,5,"B"], [3,9,"A"]],
+                            columns=["x", "y", "foo"])
+          # NB: currently *must* set the range here
+          f = figure(title="Dotplot", width=400, height=400,
+                     x_range=list(set(df["foo"])))
           mdotplot(f, "foo", ["y", "x"], df)
 
           show(f)
 
+    Note that we in the example we must set the range in the call to
+    figure, otherwise figure will use linear axis by default. It is
+    currently cumbersome to change axes types in an existing figure.
+    See `categorical axes
+    <http://bokeh.pydata.org/en/latest/docs/user_guide/plotting.html#categorical-axes>`_
+    for more information.
     """
     logger.debug("Adding dotplot to figure {}".format(fig))
     if com.is_numeric_dtype(source.to_df()[x]) == True:
@@ -152,3 +157,5 @@ def mlines(fig, x, y, df=None, source=None, **kwargs):
         kw['color'] = c
         kw['legend'] = l
         lines(fig=fig, x=x, y=yy, source=source, **kwargs)
+    # NB: there is a multi_line plotter already; try it
+    # fig.multi_line(xs=x, ys=y, source=source, **kwargs)

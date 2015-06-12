@@ -8,16 +8,18 @@ bokehutils - utility library for bokeh
 
 Version: |version|
 
-Contents:
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
 
    docs/about
+   docs/publishing
 	      
 
 API reference
-=============
+-------------
 
 .. toctree::
    :maxdepth: 4
@@ -26,7 +28,7 @@ API reference
 
 
 Indices and tables
-==================
+-------------------
 
 * :ref:`genindex`
 * :ref:`modindex`

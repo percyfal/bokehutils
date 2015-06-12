@@ -57,8 +57,10 @@ class TestDotplot(unittest.TestCase):
         # BUG: must currently set x_range to categorical axis,
         # otherwise we would need to recreate the figure in the
         # dotplot function
-        f = figure(x_range=list(self._data["treatment"]), height=200, width=200)
-        dotplot(f, "treatment", "y", self._data, line_color='gray', size=20, color="red", legend="y")
+        f = figure(x_range=list(self._data["treatment"]), height=200,
+                   width=200)
+        dotplot(f, "treatment", "y", self._data, line_color='gray',
+                size=20, color="red", legend="y")
         # output_file("tabort.html")
         # show(f)
 

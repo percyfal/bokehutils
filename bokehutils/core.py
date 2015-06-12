@@ -93,5 +93,5 @@ def inspect_fig_arg(func):
             raise
         assert isinstance(fig, Plot), \
             "argument %r does not match %s" % (fig, Plot)
-        return fig
+        return func(fig, *arglist, **kw)
     return check

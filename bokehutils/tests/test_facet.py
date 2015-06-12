@@ -2,12 +2,10 @@
 # pylint: disable=R0904, C0301, C0103, C0111, R0201, E1101, C0325
 import unittest
 from . import data, fig, source
-from nose.tools import raises
-from bokeh.plotting import show, output_file, figure
 from bokehutils.facet import facet_grid
 
 
-class TestPoints(unittest.TestCase):
+class TestFacet(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -25,7 +23,10 @@ class TestPoints(unittest.TestCase):
         del cls._fig
 
     def test_init(self):
-        facet_grid(self._fig, "x", "y", self._data)
+        self._fig.circle("x", "y", source=self._source)
+        facet_grid(self._fig, "x", "y", source=self._source)
 
     def test_init_groups(self):
-        facet_grid(self._fig, "x", "y", self._data, groups=["sex"])
+        self._fig.line("x", "y", legend="y", source=self._source)
+        self._fig.line("x", "z", legend="z", source=self._source, color="red")
+        gp = facet_grid(self._fig, "x", ["y", "z"], self._data, groups=["sex"])
