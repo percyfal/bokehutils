@@ -19,6 +19,10 @@ document.
 Examples
 ---------
 
+In the following example, we load sample data from bokeh and make both
+a facet grid and a regular plot. You can see the results `here
+<myplots.html>`_.
+
 .. bokeh-plot::
     :source-position: above
 
