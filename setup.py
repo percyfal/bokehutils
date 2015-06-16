@@ -32,6 +32,6 @@ setup(name="bokehutils",
       package_data={
           'bokehutils': [
               'static/*',
-              'templates/*',
+              'bokehutils/_templates/*',
           ],
       })
