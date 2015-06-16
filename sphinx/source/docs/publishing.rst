@@ -32,7 +32,7 @@ a facet grid and a regular plot. You can see the results `here
     from bokeh.plotting import figure, show
     from bokehutils.facet import facet_grid
     from bokehutils.geom import lines, points
-    from bokehutils.publish import static_html
+    from bokehutils.publish import static_html, data_uri
     from bokehutils.templates import EXAMPLE, _templates_path
 
     source = ColumnDataSource(flowers)
@@ -47,7 +47,10 @@ a facet grid and a regular plot. You can see the results `here
     fig = figure(width=300, height=300)
     points(fig, "sepal_length", "sepal_width", source=source)
 
+    outfile = os.path.join(_templates_path, os.pardir, os.pardir, "sphinx", "_build", "html", "docs", "mydata.csv")
+    flowers.to_csv(outfile)
+
     with open(os.path.join(_templates_path, os.pardir, os.pardir, "sphinx", "_build", "html", "docs", "myplots.html"), "w") as fh:
-        fh.write(static_html(EXAMPLE, **{'gridplot': gp, 'figure': fig}))
+        fh.write(static_html(EXAMPLE, **{'gridplot': gp, 'figure': fig, 'uri': data_uri(outfile), 'file': outfile}))
 
     show(gp)

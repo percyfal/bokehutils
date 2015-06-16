@@ -5,8 +5,8 @@ they don't modify an existing plot; rather, the generate a series of
 plots that are stitched together in a gridplot.
 """
 from bokeh.plotting import figure, gridplot
-from bokehutils.core import InspectArgs
 from bokeh.models import ColumnDataSource
+from bokehutils.core import InspectArgs
 from bokeh.models.renderers import GlyphRenderer, Legend
 import logging
 
@@ -15,14 +15,16 @@ logger = logging.getLogger(__name__)
 @InspectArgs(allow_y_list=True)
 def facet_grid(fig, x, y, df=None, source=None, groups=None, ncol=3,
                share_x_range=False, share_y_range=False, **kwargs):
-    """facet_grid - generate a simple gridplot from a figure
+    """
+    facet_grid - generate a simple gridplot from a figure
 
     Args:
       fig (:py:class:`~bokeh.plotting.Plot`): bokeh Plot object
       x (str): string for x component
       y (str, list): string or list of strings for y component
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
-      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh
+                                        ColumnDataSource object
       groups (str, list(str)): groups to group by
       ncol (int): number of columns to use in gridplot
       share_x_range (bool): share x range across plots
@@ -34,29 +36,24 @@ def facet_grid(fig, x, y, df=None, source=None, groups=None, ncol=3,
       .. bokeh-plot::
           :source-position: above
 
-          import pandas as pd
+          from bokeh.sampledata.iris import flowers
+          from bokeh.models import ColumnDataSource
           from bokeh.plotting import figure, show
           from bokehutils.facet import facet_grid
-          from bokehutils.geom import points, abline
+          from bokehutils.geom import lines, points
+          from bokehutils.publish import static_html
+          from bokehutils.templates import EXAMPLE, _templates_path
 
-          df = pd.DataFrame([[1, 2, "one", "A"],
-                             [2, 5, "two", "B"],
-                             [3, 9, "three", "B"],
-                             [4, 2, "four", "A"]],
-                             columns=["x", "y", "z", "g"])
+          source = ColumnDataSource(flowers)
+          f = figure()
+          points(f, "sepal_length", "sepal_width", source=source)
+          gp = facet_grid(f, "sepal_length", "sepal_width",
+                          flowers, groups="species",
+                          width=300, height=300,
+                          share_x_range=True,
+                          share_y_range=True)
 
-          f = figure(title="Points", width=400, height=400)
-          points(f, "x", "y", df, text="z", glyph="text", size=10, alpha=0.5)
-          show(f)
-
-          # NB: currently this is redundant; should get x, y
-          # from f in function
-          gp = facet_grid(f, "x", "y", df, groups="g",
-                          share_x_range=True, width=200, height=200)
-          for c in gp.children[0]:
-              abline(c, "x", "y", df, slope=1, intercept=0)
           show(gp)
-
     """
     if not groups:
         logger.warn("no groups defined; returning without modifying figure")

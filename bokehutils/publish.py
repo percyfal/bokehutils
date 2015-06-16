@@ -1,6 +1,8 @@
 # Copyright (C) 2015 by Per Unneberg
 import os
-from bokeh.resources import CDN, INLINE
+import mimetypes
+import base64
+from bokeh.resources import INLINE
 from bokeh.templates import RESOURCES
 from bokeh.embed import components
 from bokeh.models.widget import Widget
@@ -56,3 +58,23 @@ def static_html(template, resources=INLINE, as_utf8=True, **kw):
                                            css=css, **kw))
     else:
         return template.render(plot_resources=plot_resources, css=css, **kw)
+
+
+# This function is directly copied from snakemake.report
+def data_uri(file, defaultenc="utf8"):
+    """Craft a base64 data URI from file with proper encoding and mimetype."""
+    mime, encoding = mimetypes.guess_type(file)
+    if mime is None:
+        mime = "text/plain"
+        logger.info("Could not detect mimetype for {}, assuming "
+                    "text/plain.".format(file))
+    if encoding is None:
+        encoding = defaultenc
+    with open(file, "rb") as f:
+        data = base64.b64encode(f.read())
+    uri = ("data:{mime};charset={charset};filename={filename};base64,{data}"
+           "".format(filename=os.path.basename(file),
+                     mime=mime,
+                     charset=encoding,
+                     data=data.decode()))
+    return uri
