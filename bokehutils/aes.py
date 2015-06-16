@@ -5,7 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 def aes(x, y=None, **kwargs):
-    """aes - map aestethics à la ggplot.
+    """aes - map aestethics a la ggplot.
 
     Would be nice to have this functionality. However, it would
     require
