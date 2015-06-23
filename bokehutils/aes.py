@@ -17,6 +17,6 @@ def aes(x, y=None, **kwargs):
        renderer for each factor
 
     See `styling glyphs <http://bokeh.pydata.org/en/latest/docs/user_guide/styling.html#glyphs>`_
-    
+
     """
     pass
