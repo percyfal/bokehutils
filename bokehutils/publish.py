@@ -31,9 +31,8 @@ def static_html(template, resources=INLINE, as_utf8=True, **kw):
         js_files=resources.js_files,
         css_files=resources.css_files,
     )
-
-    with open(os.path.join(os.path.dirname(__name__),
-                           os.pardir, 'static/basic.css')) as fh:
+    cssfile = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'static/basic.css'))
+    with open(cssfile) as fh:
         css = "".join(fh.readlines())
 
     # Hack to get on-the-fly double mapping

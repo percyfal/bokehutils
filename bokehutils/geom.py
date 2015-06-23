@@ -1,6 +1,8 @@
 # Copyright (C) 2015 by Per Unneberg
 import pandas.core.common as com
+from bokeh.models import ColumnDataSource
 from bokehutils.core import InspectArgs
+from bokehutils.color import colorbrewer
 import logging
 
 logger = logging.getLogger(__name__)
@@ -153,7 +155,7 @@ def dotplot(fig, x, y, df=None, source=None,
     fig.circle(x=x, y=y, source=source, **kwargs)
 
 @InspectArgs()
-def lines(fig, x, y, df=None, source=None, **kwargs):
+def lines(fig, x, y, df=None, source=None, groups=None, **kwargs):
     """lines: add lines to a figure
 
     Args:
@@ -162,6 +164,7 @@ def lines(fig, x, y, df=None, source=None, **kwargs):
       y (str): string for y component
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
       source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      groups (str, list(str)): string or list of strings for columns to group by
       kwargs: keyword arguments to pass to fig.line
 
     Example:
@@ -183,4 +186,20 @@ def lines(fig, x, y, df=None, source=None, **kwargs):
 
     """
     logger.debug("Adding points to figure {}".format(fig))
-    fig.line(x=x, y=y, source=source, **kwargs)
+    if groups is None:
+        fig.line(x=x, y=y, source=source, **kwargs)
+    else:
+        try:
+            grouped = df.groupby(groups)
+        except:
+            raise
+        colors = colorbrewer(datalen=len(grouped.groups.keys()))
+        for k, color in zip(grouped.groups.keys(), colors):
+            name = k
+            group = grouped.get_group(name)
+            source = ColumnDataSource(group)
+            if 'legend' in kwargs:
+                kwargs['legend'] = name
+            if 'color' in kwargs:
+                kwargs['color'] = color
+            fig.line(x=x, y=y, source=source, **kwargs)
