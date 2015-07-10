@@ -3,21 +3,18 @@ from setuptools import setup, find_packages
 import glob
 import versioneer
 
-versioneer.VCS = 'git'
-versioneer.versionfile_source = 'bokehutils/_version.py'
-versioneer.versionfile_build = 'bokehutils/_version.py'
-versioneer.tag_prefix = ''  # tags are like 1.2.0
-versioneer.parentdir_prefix = 'bokehutils-'  # dirname like 'myproject-1.2.0'
-
 try:
     with open("requirements.txt", "r") as fh:
         install_requires = [x.strip() for x in fh.readlines()]
 except IOError:
     install_requires = []
 
+_version = versioneer.get_version()
+_cmdclass = versioneer.get_cmdclass()
+
 setup(name="bokehutils",
-      version=versioneer.get_version(),
-      cmdclass=versioneer.get_cmdclass(),
+      version=_version,
+      cmdclass=_cmdclass,
       author="Per Unneberg",
       author_email="per.unneberg@scilifelab.se",
       description="Utility functions for working with bokeh plots",
