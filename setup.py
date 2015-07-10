@@ -4,10 +4,10 @@ import glob
 import versioneer
 
 versioneer.VCS = 'git'
-versioneer.versionfile_source = 'gaqtk/gaqtk/_version.py'
-versioneer.versionfile_build = 'gaqtk/gaqtk/_version.py'
+versioneer.versionfile_source = 'bokehutils/bokehutils/_version.py'
+versioneer.versionfile_build = 'bokehutils/bokehutils/_version.py'
 versioneer.tag_prefix = ''  # tags are like 1.2.0
-versioneer.parentdir_prefix = 'gaqtk-'  # dirname like 'myproject-1.2.0'
+versioneer.parentdir_prefix = 'bokehutils-'  # dirname like 'myproject-1.2.0'
 
 try:
     with open("requirements.txt", "r") as fh:
