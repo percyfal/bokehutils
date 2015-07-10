@@ -4,8 +4,8 @@ import glob
 import versioneer
 
 versioneer.VCS = 'git'
-versioneer.versionfile_source = 'bokehutils/bokehutils/_version.py'
-versioneer.versionfile_build = 'bokehutils/bokehutils/_version.py'
+versioneer.versionfile_source = 'bokehutils/_version.py'
+versioneer.versionfile_build = 'bokehutils/_version.py'
 versioneer.tag_prefix = ''  # tags are like 1.2.0
 versioneer.parentdir_prefix = 'bokehutils-'  # dirname like 'myproject-1.2.0'
 
