@@ -3,11 +3,11 @@ from setuptools import setup, find_packages
 import glob
 import versioneer
 
-try:
-    with open("requirements.txt", "r") as fh:
-        install_requires = [x.strip() for x in fh.readlines()]
-except IOError:
-    install_requires = []
+INSTALL_REQUIRES = [
+    'sphinx>=1.3',
+    'nose>=1.3.4',
+    'bokeh>=0.9.1',
+]
 
 _version = versioneer.get_version()
 _cmdclass = versioneer.get_cmdclass()
@@ -20,7 +20,7 @@ setup(name="bokehutils",
       description="Utility functions for working with bokeh plots",
       license="MIT",
       scripts=glob.glob('scripts/*.py'),
-      install_requires=install_requires,
+      install_requires=INSTALL_REQUIRES,
       test_suite='nose.collector',
       packages=find_packages(exclude=['ez_setup', 'test*']),
       namespace_packages=[

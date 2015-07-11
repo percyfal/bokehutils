@@ -1,3 +1,5 @@
-bokeh
-sphinx
-nose
+# Reference: https://caremad.io/blog/setup-vs-requirement/
+--index-url https://pypi.python.org/simple/
+
+-e .
+
