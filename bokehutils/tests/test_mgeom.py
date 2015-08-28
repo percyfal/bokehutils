@@ -74,9 +74,9 @@ class TestMDotplot(unittest.TestCase):
 
 
     def test_mdotplot(self):
-        mdotplot(self._fig, "treatment", ["y", "z"],
+        mdotplot(self._fig, x="treatment", y=["y", "z"],
                  df=self._data, color=["red", "blue"],
-                 legend=["y", "z"], title="test", title_text_font_size="12pt",
+                 legend=["y", "z"],
                  size=10, alpha=0.5)
         output_file("tabort.html")
         show(self._fig)

@@ -28,7 +28,7 @@ class TestPoints(unittest.TestCase):
         points(self._fig, "x", "y", self._data)
 
     def test_style(self):
-        points(self._fig, "x", "y", self._data, line_color='gray', size=20, color="red", width=200, height=200)
+        points(self._fig, "x", "y", self._data, line_color='gray', size=20, color="red")
 
 
 class TestDotplot(unittest.TestCase):
@@ -57,8 +57,8 @@ class TestDotplot(unittest.TestCase):
         # BUG: must currently set x_range to categorical axis,
         # otherwise we would need to recreate the figure in the
         # dotplot function
-        f = figure(x_range=list(self._data["treatment"]), height=200,
-                   width=200)
+        f = figure(x_range=list(self._data["treatment"]), plot_height=200,
+                   plot_width=200)
         dotplot(f, "treatment", "y", self._data, line_color='gray',
                 size=20, color="red", legend="y")
         # output_file("tabort.html")

@@ -26,7 +26,7 @@ def xaxis(fig, i=None, **kwargs):
           from bokehutils.axes import xaxis, yaxis, grid, main, legend
 
           df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
-          f = figure(title="Test", width=300, height=300)
+          f = figure(title="Test", plot_width=300, plot_height=300)
           points(f, "x", "y", df, color="red")
           points(f, "y", "x", df, legend="y")
           
