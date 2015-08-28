@@ -5,9 +5,10 @@ they don't modify an existing plot; rather, the generate a series of
 plots that are stitched together in a gridplot.
 """
 from bokeh.plotting import figure, gridplot
-from bokeh.models import ColumnDataSource
+from bokeh.models.sources import ColumnDataSource
 from bokehutils.core import InspectArgs
-from bokeh.models.renderers import GlyphRenderer, Legend
+from bokeh.models.renderers import GlyphRenderer
+from bokeh.models.annotations import Legend
 import logging
 
 logger = logging.getLogger(__name__)
@@ -49,7 +50,7 @@ def facet_grid(fig, x, y, df=None, source=None, groups=None, ncol=3,
           points(f, "sepal_length", "sepal_width", source=source)
           gp = facet_grid(f, "sepal_length", "sepal_width",
                           flowers, groups="species",
-                          width=300, height=300,
+                          plot_width=300, plot_height=300,
                           share_x_range=True,
                           share_y_range=True)
 

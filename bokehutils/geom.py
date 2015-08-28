@@ -1,6 +1,6 @@
 # Copyright (C) 2015 by Per Unneberg
 import pandas.core.common as com
-from bokeh.models import ColumnDataSource
+from bokeh.models.sources import ColumnDataSource
 from bokehutils.core import InspectArgs
 from bokehutils.color import colorbrewer
 import logging
@@ -33,7 +33,7 @@ def points(fig, x, y,
 
           df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
 
-          f = figure(title="Points", width=400, height=400)
+          f = figure(title="Points", plot_width=400, plot_height=400)
           points(f, "x", "y", df)
           points(f, "x", "x", df, color="red")
           show(f)
@@ -47,7 +47,7 @@ def points(fig, x, y,
 
           df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
 
-          f1 = figure(title="Large plot, small points", width=400, height=400)
+          f1 = figure(title="Large plot, small points", plot_width=400, plot_height=400)
           points(f1, "x", "y", df)
 
           f2 = figure(title="Small plot, large points",
@@ -93,7 +93,7 @@ def abline(fig, x, y, df=None, source=None, slope=0, intercept=0, **kwargs):
 
           df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
 
-          f = figure(title="abline", height=300, width=300)
+          f = figure(title="abline", plot_height=300, plot_width=300)
           abline(f, "x", "y", df=df, slope=1)
           abline(f, "x", "y", df=df, slope=2)
           abline(f, "x", "y", df=df, intercept=3, color="blue", line_width=5)
@@ -140,7 +140,7 @@ def dotplot(fig, x, y, df=None, source=None,
           # NB: currently *must* set the range here, otherwise figure
           # will use linear axis by default. It is currently cumbersome
           # to change axes types in an existing figure.
-          f = figure(title="Dotplot", width=400, height=400, x_range=list(df["foo"]))
+          f = figure(title="Dotplot", plot_width=400, plot_height=400, x_range=list(df["foo"]))
           dotplot(f, "foo", "y", df)
           grid(f, grid_line_color=None)
 
@@ -153,7 +153,7 @@ def dotplot(fig, x, y, df=None, source=None,
     if com.is_numeric_dtype(source.to_df()[x]) == True:
         raise TypeError("{}: dependant variable must not be numerical type".format(__name__))
     fig.circle(x=x, y=y, source=source, **kwargs)
-
+    
 @InspectArgs()
 def lines(fig, x, y, df=None, source=None, groups=None, **kwargs):
     """lines: add lines to a figure
@@ -178,7 +178,7 @@ def lines(fig, x, y, df=None, source=None, groups=None, **kwargs):
 
           df = pd.DataFrame([[1,2], [2,5], [3,9]], columns=["x", "y"])
 
-          f = figure(title="Line plot", width=400, height=400)
+          f = figure(title="Line plot", plot_width=400, plot_height=400)
           lines(f, "x", "y", df, legend="y")
           lines(f, "x", "x", df, legend="x", color="red")
 
