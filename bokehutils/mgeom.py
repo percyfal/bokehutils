@@ -8,7 +8,6 @@ uncertain what is the best way forward.
 import pandas.core.common as com
 from bokehutils.core import InspectArgs
 from bokehutils.geom import points, dotplot, lines
-from bokeh.palettes import brewer
 import logging
 
 logger = logging.getLogger(__name__)
@@ -25,7 +24,7 @@ def mpoints(fig, x, y,
       x (str): string for x component
       y (str, list): string or list of strings for y component
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
-      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      source (:py:class:`~bokeh.models.sources.ColumnDataSource`): bokeh sources.ColumnDataSource object
       glyph (str): glyph character to use
       color (bool): set color
       legend (bool): set legend
@@ -42,7 +41,7 @@ def mpoints(fig, x, y,
 
           df = pd.DataFrame([[1,2,3], [2,5,2], [3,9,6]], columns=["x", "y", "z"])
 
-          f = figure(title="Points", width=400, height=400)
+          f = figure(title="Points", plot_width=400, plot_height=400)
           mpoints(f, "x", ["y", "z"], df, size=10, line_color="black")
           show(f)
     
@@ -72,7 +71,7 @@ def mdotplot(fig, x, y, df=None, source=None,
       x (str): string for x component
       y (str): string for y component
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
-      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      source (:py:class:`~bokeh.models.sources.ColumnDataSource`): bokeh sources.ColumnDataSource object
       color (bool): set color
       legend (bool): set legend
       binaxis (str): axis to bin dots on
@@ -90,7 +89,7 @@ def mdotplot(fig, x, y, df=None, source=None,
           df = pd.DataFrame([[1,2,"A"], [2,5,"B"], [3,9,"A"]],
                             columns=["x", "y", "foo"])
           # NB: currently *must* set the range here
-          f = figure(title="Dotplot", width=400, height=400,
+          f = figure(title="Dotplot", plot_width=400, plot_height=400,
                      x_range=list(set(df["foo"])))
           mdotplot(f, "foo", ["y", "x"], df)
 
@@ -127,7 +126,7 @@ def mlines(fig, x, y, df=None, source=None, **kwargs):
       x (str): string for x component
       y (str): string for y component
       df (:py:class:`~pandas.DataFrame`): pandas DataFram
-      source (:py:class:`~bokeh.models.ColumnDataSource`): bokeh ColumnDataSource object
+      source (:py:class:`~bokeh.models.sources.ColumnDataSource`): bokeh sources.ColumnDataSource object
       color (bool): set color
       legend (bool): set legend
       kwargs: keyword arguments to pass to fig.line
@@ -143,7 +142,7 @@ def mlines(fig, x, y, df=None, source=None, **kwargs):
 
           df = pd.DataFrame([[1,2,4], [2,5,2], [3,9,12]], columns=["x", "y", "foo"])
 
-          f = figure(title="Line plot", width=400, height=400)
+          f = figure(title="Line plot", plot_width=400, plot_height=400)
           mlines(f, "x", ["y", "foo"], df, color=["red", "blue"], legend=["y", "foo"])
 
           show(f)

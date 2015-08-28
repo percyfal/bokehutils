@@ -5,9 +5,29 @@ import versioneer
 
 INSTALL_REQUIRES = [
     'sphinx>=1.3',
-    'nose>=1.3.4',
-    'bokeh>=0.9.1',
+    'pytest',
+    'pytest-cov>=1.8.1',
+    'bokeh>=0.9.3',
 ]
+
+# Integrating pytest with setuptools: see
+# https://pytest.org/latest/goodpractises.html#integrating-with-distutils-python-setup-py-test
+from distutils.core import setup, Command
+# you can also import from setuptools
+
+class PyTest(Command):
+    user_options = []
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import subprocess
+        import sys
+        errno = subprocess.call([sys.executable, 'runtests.py'])
+        raise SystemExit(errno)
 
 _version = versioneer.get_version()
 _cmdclass = versioneer.get_cmdclass()
