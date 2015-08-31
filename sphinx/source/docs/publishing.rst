@@ -51,5 +51,3 @@ a facet grid and a regular plot. You can see the results `here
 
     with open(os.path.join(os.curdir, "_build", "html", "docs", "myplots.html"), "w") as fh:
         fh.write(static_html(EXAMPLE, **{'gridplot': gp, 'figure': fig, 'uri': data_uri(outfile), 'file': outfile}))
-
-    show(gp)
