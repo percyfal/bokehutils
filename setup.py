@@ -41,14 +41,10 @@ setup(name="bokehutils",
       license="MIT",
       scripts=glob.glob('scripts/*.py'),
       install_requires=INSTALL_REQUIRES,
-      test_suite='nose.collector',
       packages=find_packages(exclude=['ez_setup', 'test*']),
-      namespace_packages=[
-          'bokehutils',
-      ],
       package_data={
           'bokehutils': [
+              '_templates/*',
               'static/*',
-              'bokehutils/_templates/*',
           ],
       })

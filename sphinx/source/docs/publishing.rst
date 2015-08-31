@@ -36,21 +36,20 @@ a facet grid and a regular plot. You can see the results `here
     from bokehutils.templates import EXAMPLE, _templates_path
 
     source = ColumnDataSource(flowers)
-    f = figure()
+    f = figure(plot_width=300, plot_height=300)
     points(f, "sepal_length", "sepal_width", source=source)
     gp = facet_grid(f, "sepal_length", "sepal_width", 
                     flowers, groups="species",
-		    width=300, height=300,
 		    share_x_range=True,
 		    share_y_range=True)
 
-    fig = figure(width=300, height=300)
+    fig = figure(plot_width=300, plot_height=300)
     points(fig, "sepal_length", "sepal_width", source=source)
-
-    outfile = os.path.join(_templates_path, os.pardir, os.pardir, "sphinx", "_build", "html", "docs", "mydata.csv")
+    
+    outfile = os.path.join(os.curdir, "_build", "html", "docs", "mydata.csv")
     flowers.to_csv(outfile)
 
-    with open(os.path.join(_templates_path, os.pardir, os.pardir, "sphinx", "_build", "html", "docs", "myplots.html"), "w") as fh:
+    with open(os.path.join(os.curdir, "_build", "html", "docs", "myplots.html"), "w") as fh:
         fh.write(static_html(EXAMPLE, **{'gridplot': gp, 'figure': fig, 'uri': data_uri(outfile), 'file': outfile}))
 
     show(gp)

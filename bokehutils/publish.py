@@ -7,6 +7,7 @@ from bokeh.templates import RESOURCES
 from bokeh.embed import components
 from bokeh.models.widget import Widget
 from bokeh.util.string import encode_utf8
+from bokehutils.templates import _templates_path
 
 
 def static_html(template, resources=INLINE, as_utf8=True, **kw):
@@ -31,7 +32,7 @@ def static_html(template, resources=INLINE, as_utf8=True, **kw):
         js_files=resources.js_files,
         css_files=resources.css_files,
     )
-    cssfile = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir, 'static/basic.css'))
+    cssfile = os.path.abspath(os.path.join(_templates_path, os.pardir, 'static/basic.css'))
     with open(cssfile) as fh:
         css = "".join(fh.readlines())
 
