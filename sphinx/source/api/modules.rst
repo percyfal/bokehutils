@@ -1,5 +1,5 @@
-bokehutils
-==========
+API
+===
 
 .. toctree::
    :maxdepth: 4

@@ -1,0 +1,4 @@
+0.1.6 (Sep 28 2015)
+===================
+
+- update dependency to bokeh 0.10.0 (issue #8)

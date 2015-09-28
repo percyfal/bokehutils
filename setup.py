@@ -7,7 +7,7 @@ INSTALL_REQUIRES = [
     'sphinx>=1.3',
     'pytest',
     'pytest-cov>=1.8.1',
-    'bokeh>=0.9.3',
+    'bokeh>=0.10.0',
 ]
 
 # Integrating pytest with setuptools: see

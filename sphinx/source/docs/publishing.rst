@@ -50,4 +50,4 @@ a facet grid and a regular plot. You can see the results `here
     flowers.to_csv(outfile)
 
     with open(os.path.join(os.curdir, "_build", "html", "docs", "myplots.html"), "w") as fh:
-        fh.write(static_html(EXAMPLE, **{'gridplot': gp, 'figure': fig, 'uri': data_uri(outfile), 'file': outfile}))
+        fh.write(static_html(EXAMPLE, template_variables = {'gridplot': gp, 'figure': fig, 'uri': data_uri(outfile), 'file': outfile}))

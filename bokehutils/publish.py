@@ -3,43 +3,52 @@ import os
 import mimetypes
 import base64
 from bokeh.resources import INLINE
-from bokeh.templates import RESOURCES
+from bokeh.templates import JS_RESOURCES, CSS_RESOURCES
 from bokeh.embed import components
 from bokeh.models.widget import Widget
 from bokeh.util.string import encode_utf8
 from bokehutils.templates import _templates_path
 
 
-def static_html(template, resources=INLINE, as_utf8=True, **kw):
+def static_html(template, title="bokehutils plot", resources=INLINE, template_variables=None):
     """Render static html document.
 
     This is a minor modification of :py:meth:`bokeh.embed.file_html`.
 
     Args:
-      template (Template): jinja2 HTML document template
+      template (Template): a Jinja2 HTML document template
+      title (str): a title for the HTML document ``<title>`` tags.
       resources (Resources): a resource configuration for BokehJS assets
-      as_utf (bool): render utf8 output
-      kw: keyword argument list of bokeh components. Keywords must match
-          with keywords in template
+
+      template_variables (dict): variables to be used in the Jinja2
+          template. In contrast to :py:meth:`bokeh.embed.file_html`,
+          this is where plot objects are placed. The plot objects will
+          be automagically split into script and div components. If
+          used, the following variable names will be overwritten:
+          title, js_resources, css_resources
 
     Returns:
       html : standalone HTML document with embedded plot
 
     """
-    plot_resources = RESOURCES.render(
-        js_raw=resources.js_raw,
-        css_raw=resources.css_raw,
-        js_files=resources.js_files,
-        css_files=resources.css_files,
-    )
-    cssfile = os.path.abspath(os.path.join(_templates_path, os.pardir, 'static/basic.css'))
-    with open(cssfile) as fh:
-        css = "".join(fh.readlines())
+    # Assume we always have resources
+    js_resources = resources
+    css_resources = resources
 
+    bokeh_js = ''
+    if js_resources:
+        bokeh_js = JS_RESOURCES.render(js_raw=js_resources.js_raw, js_files=js_resources.js_files)
+
+    bokeh_css = ''
+    cssfile = os.path.abspath(os.path.join(_templates_path, os.pardir, 'static/basic.css'))
+
+    if css_resources:
+        bokeh_css = CSS_RESOURCES.render(css_raw=css_resources.css_raw, css_files=css_resources.css_files + [cssfile])
+        
     # Hack to get on-the-fly double mapping
-    def _update(kw):
+    def _update(template_variables):
         tmp = {}
-        for k, v in kw.items():
+        for k, v in template_variables.items():
             if (isinstance(v, Widget)):
                 tmp.update({k: [{'script': s, 'div': d}
                                 for s, d in [components(v, resources)]][0]})
@@ -52,13 +61,18 @@ def static_html(template, resources=INLINE, as_utf8=True, **kw):
                 tmp.update({k: v})
         return tmp
 
-    kw.update(_update(kw))
-    if as_utf8:
-        return encode_utf8(template.render(plot_resources=plot_resources,
-                                           css=css, **kw))
-    else:
-        return template.render(plot_resources=plot_resources, css=css, **kw)
-
+    template_variables.update(_update(template_variables))
+    template_variables_full = \
+        template_variables.copy() if template_variables is not None else {}
+    template_variables_full.update(
+        {
+            'title' : title,
+            'bokeh_js' : bokeh_js,
+            'bokeh_css' : bokeh_css,
+        }     
+    )
+    html = template.render(template_variables_full)
+    return encode_utf8(html)
 
 # This function is directly copied from snakemake.report
 def data_uri(file, defaultenc="utf8"):

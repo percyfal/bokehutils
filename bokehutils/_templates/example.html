@@ -4,23 +4,20 @@
     <head>
         <meta charset="utf-8">
         <title>{{ "Example" }}</title>
-
-        {{ plot_resources|indent(8) }}
-
-	<!-- Include bokeh script commands -->
-        {{ gridplot['script']|indent(8) }}
-        {{ figure['script']|indent(8) }}
-
+	{{ bokeh_css }}
+	{{ bokeh_js }}
     </head>
     <body>
       <h1>Grid plot</h1>
 
-        {{ gridplot['div']|indent(8) }}
+      {{ gridplot['div']|indent(8) }}
+      {{ gridplot['script']|indent(8) }}
 
 
       <h1>Figure</h1>
 
-        {{ figure['div']|indent(8) }}
+      {{ figure['div']|indent(8) }}
+      {{ figure['script']|indent(8) }}
 
       <h1>Data</h1>
 
