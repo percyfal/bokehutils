@@ -43,7 +43,7 @@ def static_html(template, title="bokehutils plot", resources=INLINE, template_va
     cssfile = os.path.abspath(os.path.join(_templates_path, os.pardir, 'static/basic.css'))
 
     if css_resources:
-        bokeh_css = CSS_RESOURCES.render(css_raw=css_resources.css_raw, css_files=css_resources.css_files + [cssfile])
+        bokeh_css = CSS_RESOURCES.render(css_raw=css_resources.css_raw, css_files=[cssfile])
         
     # Hack to get on-the-fly double mapping
     def _update(template_variables):
