@@ -10,6 +10,16 @@ INSTALL_REQUIRES = [
     'bokeh>=0.10.0',
 ]
 
+try:
+    # Hack for readthedocs
+    if not 'readthedocs' in os.path.dirname(os.path.realpath(__file__)):
+        pass
+    else:
+        print("readthedocs in path name; assuming we're building docs @readthedocs")
+        INSTALL_REQUIRES.append('sphinx-bootstrap-theme')
+except:
+    pass
+
 # Integrating pytest with setuptools: see
 # https://pytest.org/latest/goodpractises.html#integrating-with-distutils-python-setup-py-test
 from distutils.core import setup, Command
