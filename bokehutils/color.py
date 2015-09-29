@@ -1,7 +1,8 @@
 # Copyright (C) 2015 by Per Unneberg
 import math
 import pandas.core.common as com
-from bokeh.palettes import brewer
+from bokeh.palettes import brewer as bokeh_brewer
+from bokehutils.palettes import brewer as bokehutils_brewer
 import logging
 
 logger = logging.getLogger(__name__)
@@ -9,9 +10,11 @@ logger = logging.getLogger(__name__)
 MINSIZE = 3
 MAXSIZE = 9  # FIXME: some palettes have 9 as max, some 11
 
+brewer = bokeh_brewer
+brewer.update(bokehutils_brewer)
 
-def colorbrewer(size=MINSIZE, palette="PiYG", datalen=None):
-    """Generate a colorblind-friendly color palette.
+def colorbrewer(size=MINSIZE, palette="Paired", datalen=None):
+    """Generate a color palette following colorbrewer.
 
     Args:
       size (int): size of desired palette
