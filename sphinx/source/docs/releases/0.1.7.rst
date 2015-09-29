@@ -1,0 +1,4 @@
+0.1.7 (Sep 29 2015)
+===================
+
+- add css_raw option for static_html (issue #9)
