@@ -1,0 +1,4 @@
+0.1.8 (Sep ## 2015)
+===================
+
+- add qualitative brewer palettes (issue #10)
