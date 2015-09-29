@@ -10,7 +10,7 @@ from bokeh.util.string import encode_utf8
 from bokehutils.templates import _templates_path
 
 
-def static_html(template, title="bokehutils plot", resources=INLINE, template_variables=None):
+def static_html(template, title="bokehutils plot", resources=INLINE, css_raw=None, template_variables=None):
     """Render static html document.
 
     This is a minor modification of :py:meth:`bokeh.embed.file_html`.
@@ -19,6 +19,7 @@ def static_html(template, title="bokehutils plot", resources=INLINE, template_va
       template (Template): a Jinja2 HTML document template
       title (str): a title for the HTML document ``<title>`` tags.
       resources (Resources): a resource configuration for BokehJS assets
+      css_raw (list): a list of file names for inclusion in the raw css
 
       template_variables (dict): variables to be used in the Jinja2
           template. In contrast to :py:meth:`bokeh.embed.file_html`,
@@ -31,6 +32,17 @@ def static_html(template, title="bokehutils plot", resources=INLINE, template_va
       html : standalone HTML document with embedded plot
 
     """
+    # From bokeh.resources
+    def _inline(paths):
+        strings = []
+        for path in paths:
+            begin = "/* BEGIN %s */" % path
+            middle = open(path, 'rb').read().decode("utf-8")
+            end = "/* END %s */" % path
+            strings.append(begin + '\n' + middle + '\n' + end)
+        return strings
+
+
     # Assume we always have resources
     js_resources = resources
     css_resources = resources
@@ -40,10 +52,13 @@ def static_html(template, title="bokehutils plot", resources=INLINE, template_va
         bokeh_js = JS_RESOURCES.render(js_raw=js_resources.js_raw, js_files=js_resources.js_files)
 
     bokeh_css = ''
-    cssfile = os.path.abspath(os.path.join(_templates_path, os.pardir, 'static/basic.css'))
 
+    _css_raw = css_resources.css_raw
+    if css_raw:
+        tmp = lambda: _inline(css_raw)
+        _css_raw += tmp()
     if css_resources:
-        bokeh_css = CSS_RESOURCES.render(css_raw=css_resources.css_raw, css_files=[cssfile])
+        bokeh_css = CSS_RESOURCES.render(css_raw=_css_raw, css_files=css_resources.css_files)
         
     # Hack to get on-the-fly double mapping
     def _update(template_variables):
