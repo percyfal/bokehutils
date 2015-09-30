@@ -1,10 +1,172 @@
-2015-09-29	0.1.7:
-----------------------
-  * features:
-    - #9 add css_raw option to static_html
+Changelog
+=========
 
-2015-09-28	0.1.6:
-----------------------
-  * features:
-    - #8 update dependency to bokeh 0.10.0
+0.1.8 (2015-09-29)
+------------------
+
+- Add release notes. [Per Unneberg]
+
+- Add qualitative brewer palettes. [Per Unneberg]
+
+  Fix #10
+
+0.1.7 (2015-09-29)
+------------------
+
+- Add release notes. [Per Unneberg]
+
+- Add css_raw option for static_html. [Per Unneberg]
+
+  Fixes #9
+
+- Update css file list. [Per Unneberg]
+
+0.1.6 (2015-09-28)
+------------------
+
+- Add bootstrap theme to rtd. [Per Unneberg]
+
+- Correct version number. [Per Unneberg]
+
+- Update dependency to bokeh 0.10.0. [Per Unneberg]
+
+  Fix #8
+
+0.1.5 (2015-08-31)
+------------------
+
+- Remove superfluous show statement. [Per Unneberg]
+
+- Fix failing documentation example. [Per Unneberg]
+
+0.1.4 (2015-08-28)
+------------------
+
+- Cleanup to comply with bokeh-0.9.3. [Per Unneberg]
+
+  Fixes #5
+
+  - delete incorrect attributes to glyphs
+  - update imports
+
+0.1.3 (2015-07-11)
+------------------
+
+- Add failure test for title parameter to fig.circle. [Per Unneberg]
+
+  Fix #4
+
+- Update requirements. [Per Unneberg]
+
+  Modul requirements/setup after snakemakelib
+
+0.1.2 (2015-07-10)
+------------------
+
+- Configure versioneer in setup.cfg. [Per Unneberg]
+
+  - update versioneer version
+  - update versioneer config in setup
+  - remove versioneer code
+
+- Remove extra bokehutils path. [Per Unneberg]
+
+- Insert correct versioneer tags. [Per Unneberg]
+
+  Replace gaqtk with bokehutils
+
+0.1.1 (2015-06-23)
+------------------
+
+- * bokehutils/__init__.py: add namespace. [Per Unneberg]
+
+- * setup.py: update _templates path. [Per Unneberg]
+
+- * bokehutils/publish.py: correct path to static.css. [Per Unneberg]
+
+- Add color to lines plot. [Per Unneberg]
+
+  * bokehutils/geom.py: add groups argument to lines
+  * bokehutils/color.py: new
+
+0.1.0 (2015-06-16)
+------------------
+
+- Add example.html. [Per Unneberg]
+
+- * bokehutils/aes.py: fix utf problem. [Per Unneberg]
+
+- Add final touches to documentation and example. [Per Unneberg]
+
+  * bokehutils/facet.py: update iris example
+  * bokehutils/publish.py: add uri output
+  * sphinx/source/docs/publishing.rst: add uri example
+
+- * sphinx/source/docs/publishing.rst: add link to example output. [Per
+  Unneberg]
+
+- * bokehutils/facet.py: add example * bokehutils/publish.py: update
+  docs, make INLINE publishing default * bokehutils/templates.py: add
+  example template * sphinx/source/docs/about.rst: update docs *
+  sphinx/source/docs/publishing.rst: add to docs. [Per Unneberg]
+
+- Update docs link. [Per Unneberg]
+
+- Add facet, tooltips and other things. [Per Unneberg]
+
+  * bokehutils/axes.py: add legend, main
+  * bokehutils/core.py: update return value to actually return the function
+  * bokehutils/facet.py: simple working grid example
+
+- Add facet module and test color, legend plotting. [Per Unneberg]
+
+- * .gitignore: add .noseids. [Per Unneberg]
+
+- * bokehutils/core.py: remove obsolete inspect_args functions. [Per
+  Unneberg]
+
+- Improve decorator functionality with InspectArgs. [Per Unneberg]
+
+  * bokehutils/core.py: add InspectArgs class
+  * bokehutils/geom.py: use InspectArgs
+  * bokehutils/tests/__init__.py: add columns
+  * bokehutils/tests/test_core.py: add InpectArgs test
+  * sphinx/source/api/bokehutils.rst: add mgeom
+
+- Add more inspector decorators. [Per Unneberg]
+
+  * bokehutils/axes.py: add inspect_fig_arg
+  * bokehutils/core.py: add inspector functions
+  * bokehutils/tests/test_core.py: add tests
+  * bokehutils/tests/test_geom.py: comment out show statements
+
+- Add requirements.txt. [Per Unneberg]
+
+- Add axes, line and dotplots, update documentation layout. [Per
+  Unneberg]
+
+- Add geom documentation. [Per Unneberg]
+
+  Add documentation and examples to points
+
+- Add test for non-existing column. [Per Unneberg]
+
+  Throw an error if user tries to access a column that doesn't exist in data.
+
+- Add basic functionality. [Per Unneberg]
+
+  Add basic functionality, including:
+
+  1. plotting points
+  2. publishing functions
+  3. tests for core
+  4. core decorator that inspects arguments
+
+- Initial commit. [Per Unneberg]
+
+  * setup.cfg: add
+  * setup.py: add
+
+- Initial commit. [Per Unneberg]
+
 
